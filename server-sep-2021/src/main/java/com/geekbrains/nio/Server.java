@@ -8,8 +8,13 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class Server {
@@ -70,7 +75,24 @@ public class Server {
 
         }
         String message = msg.toString();
-        channel.write(ByteBuffer.wrap(("[" + LocalDateTime.now() + "] " + message).getBytes(StandardCharsets.UTF_8)));
+        switch (message){
+            case "l": // aka ls
+                Path path = Paths.get("server-sep-2021","root");
+                DirectoryStream<Path> filesList = Files.newDirectoryStream(path); // try
+                for(Path p: filesList) {
+                    channel.write(ByteBuffer.wrap((p.toString().substring(20,p.toString().length())+"\n").getBytes(StandardCharsets.UTF_8)));
+                }
+                break;
+            case "c": // aka cat
+                Path pathFile = Paths.get("server-sep-2021","root","one.txt");
+                List<String> fileContent = Files.readAllLines(pathFile);
+                for(String s: fileContent) {
+                    channel.write(ByteBuffer.wrap((s + "\n").getBytes(StandardCharsets.UTF_8)));
+                }
+            default:
+                channel.write(ByteBuffer.wrap(("[" + LocalDateTime.now() + "] " + message).getBytes(StandardCharsets.UTF_8)));
+                break;
+        }
     }
 
     private void handleAccept(SelectionKey key) throws IOException {
