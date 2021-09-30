@@ -1,3 +1,6 @@
 # Project exclude paths
 /client-sep-2021/target/
 /server-sep-2021/target/
+.idea/runConfigurations.xml
+
+.idea/vcs.xml

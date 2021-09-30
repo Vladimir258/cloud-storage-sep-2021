@@ -1,14 +1,4 @@
-import com.geekbrains.Command;
-import com.geekbrains.FileMessage;
-import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
-import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
-import javafx.event.ActionEvent;
-import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.file.Files;
@@ -17,16 +7,23 @@ import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
-public class Controller implements Initializable {
+public class OldController implements Initializable {
 
     private static final String ROOT_DIR = "client-sep-2021/root";
     private static byte[] buffer = new byte[1024];
     public ListView<String> listView;
     public TextField input;
-    private ObjectDecoderInputStream is;
-    private ObjectEncoderOutputStream os;
+    private DataInputStream is;
+    private DataOutputStream os;
 
     public void send(ActionEvent actionEvent) throws Exception {
         String fileName = input.getText();
@@ -36,7 +33,15 @@ public class Controller implements Initializable {
 
     private void sendFile(String fileName) throws IOException {
         Path file = Paths.get(ROOT_DIR, fileName);
-        os.writeObject(new FileMessage(file));
+        long size = Files.size(file); // Вычисляем размер файла. Throw от этого метода
+        os.writeUTF(fileName);
+        os.writeLong(size);
+        InputStream fileStream = Files.newInputStream(file);
+        // InputStream fileStream = new FileInputStream(ROOT_DIR + "/" + fileName);
+        int read;
+        while ((read = fileStream.read(buffer)) != -1) {
+            os.write(buffer, 0, read);
+        }
         os.flush();
     }
 
@@ -45,29 +50,14 @@ public class Controller implements Initializable {
         try {
             fillFilesInCurrentDir();
             Socket socket = new Socket("localhost", 8189);
-            os = new ObjectEncoderOutputStream(socket.getOutputStream());
-            is = new ObjectDecoderInputStream(socket.getInputStream());
+            is = new DataInputStream(socket.getInputStream());
+            os = new DataOutputStream(socket.getOutputStream());
             Thread daemon = new Thread(() -> {
                 try {
                     while (true) {
-                        Command msg = (Command) is.readObject();
-                        // TODO Разработка системы команд
-                        switch (msg.getType()) {
-                            case LIST_REQUEST:
-                                break;
-                            case LIST_RESPONSE:
-                                break;
-                            case FILE_REQUEST:
-                                break;
-                            case FILE_MESSAGE:
-                                break;
-                            case PATH_REQUEST:
-                                break;
-                            case PATH_RESPONSE:
-                                break;
-                            default:
-                                break;
-                        }
+                        String msg = is.readUTF();
+                        log.debug("received: {}", msg);
+                        Platform.runLater(() -> listView.getItems().add(msg));
                     }
                 } catch (Exception e) {
                     log.error("exception while read from input stream");
