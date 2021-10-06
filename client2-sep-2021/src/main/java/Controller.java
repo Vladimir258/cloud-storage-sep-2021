@@ -18,12 +18,16 @@ public class Controller {
     @FXML
     VBox leftPanel, rightPanel;
 
+    private PanelController serverPC = null;
+//    PanelController leftPC = (PanelController) leftPanel.getProperties().get("ctrl");
+//    PanelController rightPC = (PanelController) rightPanel.getProperties().get("ctrl");
+
     public void btnExitAction(ActionEvent actionEvent) {
         Platform.exit();
     }
 
     public void copyBtnAction(ActionEvent actionEvent) {
-        // Получаем ссылки на контроллеры панелей
+
         PanelController leftPC = (PanelController) leftPanel.getProperties().get("ctrl");
         PanelController rightPC = (PanelController) rightPanel.getProperties().get("ctrl");
 
@@ -66,7 +70,7 @@ public class Controller {
     }
 
     public void moveBtnAction(ActionEvent actionEvent) {
-        // Получаем ссылки на контроллеры панелей
+
         PanelController leftPC = (PanelController) leftPanel.getProperties().get("ctrl");
         PanelController rightPC = (PanelController) rightPanel.getProperties().get("ctrl");
 
@@ -104,7 +108,7 @@ public class Controller {
     }
 
     public void deletedBtnAction(ActionEvent actionEvent) {
-        // Получаем ссылки на контроллеры панелей
+
         PanelController leftPC = (PanelController) leftPanel.getProperties().get("ctrl");
         PanelController rightPC = (PanelController) rightPanel.getProperties().get("ctrl");
 
@@ -138,7 +142,7 @@ public class Controller {
     }
 
     public void btnConnect(ActionEvent actionEvent) {
-        // Получаем ссылки на контроллеры панелей
+
         PanelController leftPC = (PanelController) leftPanel.getProperties().get("ctrl");
         PanelController rightPC = (PanelController) rightPanel.getProperties().get("ctrl");
 
@@ -151,10 +155,12 @@ public class Controller {
         // Коннектимся к серверу на выбранной панели
         if(leftPC.getSelectedPanel()) {
             leftPC.serverConnect();
+            serverPC = leftPC;
+
         }
         if(rightPC.getSelectedPanel()) {
             rightPC.serverConnect();
+            serverPC = rightPC;
         }
-
     }
 }

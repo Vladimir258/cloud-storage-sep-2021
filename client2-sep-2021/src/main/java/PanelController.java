@@ -38,6 +38,7 @@ public class PanelController implements Initializable {
     private ObjectDecoderInputStream is;
     private ObjectEncoderOutputStream os;
 
+
     @Override
     public void initialize(URL location, ResourceBundle resource) {
 
@@ -110,13 +111,13 @@ public class PanelController implements Initializable {
             }
         });
         // Указываем где собирать файлы
-        updateList(Paths.get("." + "/disk")); // Path.get - способ задания путей
+        updateList(Paths.get("." + "/client2-sep-2021/root")); // Path.get - способ задания путей
+
     }
 
     // Метод собирающий список файлов по указанному пути
     public void updateList(Path path) {
         try {
-            // 00.33.00 описание этой тряпки, надо бы в комменты
             pathField.setText(path.normalize().toAbsolutePath().toString());
             filesTable.getItems().clear(); // Предварительная чистка списка файлов
             //  getItems - ссылка на список файлов, addAll - хотим добавить коллекцию файлов, Files.list(path) - возвращает поток путей, по указанному пути
@@ -170,14 +171,15 @@ public class PanelController implements Initializable {
     // Подключение к серверу
     public void serverConnect() {
         try {
-
-          //  fillFilesInCurrentDir();
             Socket socket = new Socket("localhost", 8189);
             os = new ObjectEncoderOutputStream(socket.getOutputStream());
             is = new ObjectDecoderInputStream(socket.getInputStream());
-            updateList(Paths.get("C:\\projectJ\\cloud\\cloud-storage-sep-2021\\server-sep-2021\\root"));
+
+            updateList(Paths.get(is.readUTF()) );
+
             Thread daemon = new Thread(() -> {
                 try {
+
                     while (true) {
                         Command msg = (Command) is.readObject();
                         // TODO Разработка системы команд
@@ -199,19 +201,17 @@ public class PanelController implements Initializable {
                         }
                     }
                 } catch (Exception e) {
-                    //log.error("exception while read from input stream");
-                   // System.out.println("Не могу прочитать с сервера");
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Не могу прочитать с сервера", ButtonType.OK);
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Невозможно прочитать с сервера", ButtonType.OK);
                     alert.showAndWait();
                 }
             });
             daemon.setDaemon(true);
             daemon.start();
+
         } catch (IOException ioException) {
-           // log.error("e=", ioException);
             Alert alert = new Alert(Alert.AlertType.ERROR, "Ошибка подключения", ButtonType.OK);
             alert.showAndWait();
+
         }
     }
-
 }
