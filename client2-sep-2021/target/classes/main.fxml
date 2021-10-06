@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="center" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="Controller">
+    <MenuBar>
+        <Menu text="Файл">
+            <MenuItem text="Выйти из программы" onAction="#btnExitAction"/>
+        </Menu>
+        <Menu text="Сервер">
+            <MenuItem text="Подключиться к удаленному серверу" onAction="#btnConnect"/>
+        </Menu>
+    </MenuBar>
+
+    <HBox VBox.vgrow="ALWAYS">
+        <fx:include fx:id="leftPanel" source="panel.fxml" HBox.hgrow="ALWAYS"/>
+        <fx:include fx:id="rightPanel" source="panel.fxml" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox spacing="2">
+        <Button maxWidth="Infinity" focusTraversable="false" text="Копирование" HBox.hgrow="ALWAYS" onAction="#copyBtnAction"/>
+        <Button maxWidth="Infinity" focusTraversable="false" text="Перемещение" HBox.hgrow="ALWAYS" onAction="#moveBtnAction"/>
+        <Button maxWidth="Infinity" focusTraversable="false" text="Удаление" HBox.hgrow="ALWAYS" onAction="#deletedBtnAction"/>
+      <padding>
+         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+      </padding>
+    </HBox>
+</VBox>
