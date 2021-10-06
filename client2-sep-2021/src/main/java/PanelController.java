@@ -1,5 +1,6 @@
 
 
+import com.geekbrains.Command;
 import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -108,8 +109,6 @@ public class PanelController implements Initializable {
                 }
             }
         });
-
-
         // Указываем где собирать файлы
         updateList(Paths.get("." + "/disk")); // Path.get - способ задания путей
     }
@@ -180,24 +179,24 @@ public class PanelController implements Initializable {
             Thread daemon = new Thread(() -> {
                 try {
                     while (true) {
-//                        Command msg = (Command) is.readObject();
-//                        // TODO Разработка системы команд
-//                        switch (msg.getType()) {
-//                            case LIST_REQUEST:
-//                                break;
-//                            case LIST_RESPONSE:
-//                                break;
-//                            case FILE_REQUEST:
-//                                break;
-//                            case FILE_MESSAGE:
-//                                break;
-//                            case PATH_REQUEST:
-//                                break;
-//                            case PATH_RESPONSE:
-//                                break;
-//                            default:
-//                                break;
-//                        }
+                        Command msg = (Command) is.readObject();
+                        // TODO Разработка системы команд
+                        switch (msg.getType()) {
+                            case LIST_REQUEST:
+                                break;
+                            case LIST_RESPONSE:
+                                break;
+                            case FILE_REQUEST:
+                                break;
+                            case FILE_MESSAGE:
+                                break;
+                            case PATH_REQUEST:
+                                break;
+                            case PATH_RESPONSE:
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 } catch (Exception e) {
                     //log.error("exception while read from input stream");

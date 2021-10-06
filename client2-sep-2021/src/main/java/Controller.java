@@ -76,7 +76,7 @@ public class Controller {
             alert.showAndWait();
             return;
         }
-        // Понимаем что куда копировать
+        // Понимаем что куда переместить
         PanelController srcPC = null, dstPC = null;
         if(leftPC.getSelectedFilename() != null) {
             srcPC = leftPC;
@@ -87,14 +87,14 @@ public class Controller {
             dstPC = leftPC;
         }
 
-        // Какой файл копировать
+        // Какой файл переместить
         Path srcPath = Paths.get(srcPC.getCurrentPath(), srcPC.getSelectedFilename());
         Path dstPath = Paths.get(dstPC.getCurrentPath()).resolve(srcPath.getFileName().toString());
 
         try{
-            // Копирование файла из источника в точку назначения
+            // Перемещение файла из источника в точку назначения
             Files.move(srcPath, dstPath);
-            // Обновляем панель в которую скопировали, чтоб отображать новый файл
+            // Обновляем панели
             dstPC.updateList(Paths.get(dstPC.getCurrentPath()));
             srcPC.updateList(Paths.get(srcPC.getCurrentPath()));
         } catch (IOException e) {
@@ -114,7 +114,7 @@ public class Controller {
             alert.showAndWait();
             return;
         }
-        // Понимаем что куда копировать
+        // Смотрим активную панель
         PanelController srcPC = null;
         if(leftPC.getSelectedFilename() != null) {
             srcPC = leftPC;
@@ -123,14 +123,13 @@ public class Controller {
             srcPC = rightPC;
         }
 
-        // Какой файл копировать
+        // Какой файл удалить
         Path srcPath = Paths.get(srcPC.getCurrentPath(), srcPC.getSelectedFilename());
 
-
         try{
-            // Копирование файла из источника в точку назначения
+            // Удаление файла
             Files.delete(srcPath);
-            // Обновляем панель в которую скопировали, чтоб отображать новый файл
+            // Обновляем панель в которой удалили файл
             srcPC.updateList(Paths.get(srcPC.getCurrentPath()));
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Не удалось удалить указанный файл", ButtonType.OK);
@@ -149,6 +148,7 @@ public class Controller {
             alert.showAndWait();
             return;
         }
+        // Коннектимся к серверу на выбранной панели
         if(leftPC.getSelectedPanel()) {
             leftPC.serverConnect();
         }
