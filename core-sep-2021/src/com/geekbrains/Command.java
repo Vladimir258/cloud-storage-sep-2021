@@ -7,7 +7,6 @@ public class Command implements Serializable {
     CommandType type;
 
     // Конструктор
-
     public CommandType getType() {
         return type;
     }

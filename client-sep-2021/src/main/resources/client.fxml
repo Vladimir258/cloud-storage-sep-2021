@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <ListView fx:id="listView" layoutX="14.0" layoutY="38.0" prefHeight="346.0" prefWidth="261.0" />
+    <ListView fx:id="serverView" layoutX="325.0" layoutY="38.0" prefHeight="346.0" prefWidth="261.0" />
+    <Button layoutX="281.0" layoutY="151.0" onAction="#btnUpload" prefHeight="42.0" prefWidth="38.0" text="&gt;" />
+    <Button layoutX="281.0" layoutY="229.0" onAction="#btnDownLoad" prefHeight="42.0" prefWidth="38.0" text="&lt;" />
+    <TextField fx:id="clientPath" editable="false" layoutX="14.0" layoutY="11.0" prefHeight="25.0" prefWidth="227.0" />
+    <TextField fx:id="serverPath" editable="false" layoutX="325.0" layoutY="11.0" prefHeight="25.0" prefWidth="227.0" />
+    <Button layoutX="242.0" layoutY="11.0" onAction="#btnClientPathUp" text="UP" />
+    <Button layoutX="554.0" layoutY="11.0" onAction="#btnServerPathUp" text="UP" />
+
+</AnchorPane>
